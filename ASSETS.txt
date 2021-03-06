@@ -1,0 +1,1 @@
+﻿Content/BallSprite.png & Content/RectangleSprite.png- provided by the Aether2D Physics project samples under the Microsoft Permissive License
