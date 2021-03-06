@@ -4,6 +4,8 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using tainicom.Aether.Physics2D.Dynamics;
+using tainicom.Aether.Physics2D.Dynamics.Contacts;
 
 namespace PhysicsExampleDGame
 {
@@ -17,17 +19,20 @@ namespace PhysicsExampleDGame
         float radius;
         float scale;
         Vector2 origin;
+        Body body;
 
         /// <summary>
         /// A boolean indicating if this ball is colliding with another
         /// </summary>
         public bool Colliding { get; protected set; }
        
-        public BallSprite(float radius)
+        public BallSprite(float radius, Body body)
         {
+            this.body = body;
             this.radius = radius;
             scale = radius / 49;
-            origin = new Vector2(49, 49);         
+            origin = new Vector2(49, 49);
+            this.body.OnCollision += CollisionHandler;
         }
 
         /// <summary>
@@ -57,7 +62,14 @@ namespace PhysicsExampleDGame
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             // Use Green for visual collision indication
-            Color color = (Colliding) ? Color.Green : Color.White;           
+            Color color = (Colliding) ? Color.Green : Color.White;
+            spriteBatch.Draw(texture, body.Position, null, color, body.Rotation, origin, scale, SpriteEffects.None, 0);
+        }
+
+        bool CollisionHandler (Fixture fixture, Fixture other, Contact contact)
+        {
+            Colliding = true;
+            return true;
         }
 
     }
